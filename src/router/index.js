@@ -15,7 +15,10 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    component: () => import('../views/About.vue')
+    component: () => import('../views/About.vue'),
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/login',
@@ -41,26 +44,13 @@ const router = createRouter({
 })
 
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!auth()) {
-      next({
-        path: '/login',
-        query: { redirect: to.fullPath }
-      })
-    } else {
-      next()
-    }
-  } else {
-    if (auth()) {
-      next({
-        path: '/',
-        query: { redirect: to.fullPath }
-      })
-    } else {
-      next()
-    }
+router.beforeEach((to) => {
+  const isLoggedIn = auth();
+  if (!to.meta.requiresAuth && isLoggedIn) {
+    return {name: 'Home'};
+  } else if (to.meta.requiresAuth && !isLoggedIn) {
+    return {name: 'Login'};
   }
-})
+});
 
 export default router
