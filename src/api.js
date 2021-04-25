@@ -93,4 +93,10 @@ function updateNote(noteToUpdate) {
   localStorage.setItem('notes', JSON.stringify(notes));
 }
 
-export {reg, login, getAuthUser, removeAuthUser, sendNote, fetchNotes, fetchNote, updateNote};
+function deleteNote(id) {
+  const notes = getNotesFromLS();
+  const filteredNotes = notes.filter(note => note.id !== id);
+  localStorage.setItem('notes', JSON.stringify(filteredNotes));
+}
+
+export {reg, login, getAuthUser, removeAuthUser, sendNote, fetchNotes, fetchNote, updateNote, deleteNote};
