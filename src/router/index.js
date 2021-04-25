@@ -1,7 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import Home from '../views/Home.vue'
-import {auth} from "../middleware/auth";
-// import {guest} from "../middleware/guest";
+import {getAuthUser} from '../api'
 
 const routes = [
   {
@@ -45,7 +44,7 @@ const router = createRouter({
 
 
 router.beforeEach((to) => {
-  const isLoggedIn = auth();
+  const isLoggedIn = getAuthUser();
   if (!to.meta.requiresAuth && isLoggedIn) {
     return {name: 'Home'};
   } else if (to.meta.requiresAuth && !isLoggedIn) {
