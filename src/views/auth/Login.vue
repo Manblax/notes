@@ -5,13 +5,13 @@
       <div class="field">
         <label class="label">Email</label>
         <div class="control">
-          <input v-model="email" class="input" type="email" placeholder="Email">
+          <input v-model="email" class="input" type="email" placeholder="Email" required>
         </div>
       </div>
       <div class="field">
         <label class="label">Пароль</label>
         <div class="control">
-          <input v-model="password" class="input" type="password" placeholder="password">
+          <input v-model="password" class="input" type="password" placeholder="password" required minlength="4">
         </div>
       </div>
       <p v-if="errorMsg" class="help is-danger">{{ errorMsg }}</p>
