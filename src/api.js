@@ -28,25 +28,33 @@ async function login(userToAuth) {
   const currentUsers = JSON.parse(localStorage.getItem('users') || '[]');
   const foundUser = currentUsers.find(user => user.email === userToAuth.email);
 
-  if (foundUser) {
-    const authUser = JSON.parse(localStorage.getItem('authUser'));
-    if (!authUser) {
-      if ((foundUser.email === userToAuth.email) && (foundUser.password === userToAuth.password)) {
-        localStorage.setItem('authUser', JSON.stringify(userToAuth));
-        return {success: 'Пользователь авторизован'};
-      } else {
-        return {error: 'Неверный логин и/или пароль'};
-      }
+  if (!foundUser) {
+    return {error: 'Данный пользователь не зарегистрирован'};
+  }
+
+  const authUser = getAuthUser();
+  if (!authUser) {
+    if ((foundUser.email === userToAuth.email) && (foundUser.password === userToAuth.password)) {
+      localStorage.setItem('authUser', JSON.stringify(userToAuth));
+      return {success: 'Пользователь авторизован'};
     } else {
-      if ((authUser.email === userToAuth.email) && (authUser.password === userToAuth.password)) {
-        return {auth: 'Пользователь уже авторизован'};
-      } else {
-        return {error: 'Неизвестная ошибка'};
-      }
+      return {error: 'Неверный логин и/или пароль'};
     }
   } else {
-    return {error: 'Данный пользователь не зарегистрирован'};
+    if ((authUser.email === userToAuth.email) && (authUser.password === userToAuth.password)) {
+      return {success: 'Пользователь уже авторизован'};
+    } else {
+      return {error: 'Неизвестная ошибка'};
+    }
   }
 }
 
-export {reg, login};
+function getAuthUser() {
+  return JSON.parse(localStorage.getItem('authUser'));
+}
+
+function removeAuthUser() {
+  localStorage.removeItem('authUser');
+}
+
+export {reg, login, getAuthUser, removeAuthUser};
