@@ -1,7 +1,7 @@
 <template>
   <div class="container is-max-desktop">
     <h1 class="title is-1">Регистрация</h1>
-    <form @submit.prevent="submit">
+    <form @submit.prevent="submit" class="box">
       <div class="field">
         <label class="label">Name</label>
         <div class="control">
@@ -52,7 +52,7 @@ export default {
   methods: {
     async submit() {
       if (!this.name && !this.userName && !this.email && !this.password) {
-        return this.errorMsg = 'Поля пустые или что-то не так';
+        return this.errorMsg = 'Некоторые поля не заполнены';
       }
       const user = {
         name: this.name,
@@ -68,7 +68,8 @@ export default {
           this.errorMsg = result.error;
         }
       } catch (err) {
-        this.errorMsg = 'Неизвестная ошибка при регистрации';
+        console.error(err);
+        this.errorMsg = 'Неизвестная ошибка';
       }
     }
   }
