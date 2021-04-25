@@ -12,9 +12,17 @@ const routes = [
     }
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import('../views/About.vue'),
+    path: '/create',
+    name: 'CreateNote',
+    component: () => import('../views/CreateNote.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/edit/:id',
+    name: 'EditNote',
+    component: () => import('../views/EditNote'),
     meta: {
       requiresAuth: true
     }

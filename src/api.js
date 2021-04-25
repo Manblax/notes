@@ -57,4 +57,40 @@ function removeAuthUser() {
   localStorage.removeItem('authUser');
 }
 
-export {reg, login, getAuthUser, removeAuthUser};
+function sendNote(note) {
+  const notes = getNotesFromLS();
+  note.id = generateID();
+  notes.push(note);
+  localStorage.setItem('notes', JSON.stringify(notes));
+}
+
+function generateID() {
+  return '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function fetchNotes() {
+  return getNotesFromLS();
+}
+
+function fetchNote(id) {
+  const notes = getNotesFromLS();
+  return notes.find(note => note.id === id);
+}
+
+function getNotesFromLS() {
+  return JSON.parse(localStorage.getItem('notes') || '[]');
+}
+
+function updateNote(noteToUpdate) {
+  const notes = getNotesFromLS();
+  const foundedNote = notes.find(note => note.id === noteToUpdate.id);
+  if (!foundedNote) return;
+
+  foundedNote.src = noteToUpdate.src;
+  foundedNote.text = noteToUpdate.text;
+  console.log(foundedNote === notes[0]);
+
+  localStorage.setItem('notes', JSON.stringify(notes));
+}
+
+export {reg, login, getAuthUser, removeAuthUser, sendNote, fetchNotes, fetchNote, updateNote};
