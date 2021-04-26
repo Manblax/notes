@@ -1,3 +1,9 @@
+function fetchAbsolute(baseUrl) {
+  return (url, ...otherParams) => url.startsWith('/') ? fetch(baseUrl + url, ...otherParams) : fetch(url, ...otherParams);
+}
+
+const fetcher = fetchAbsolute(process.env.VUE_APP_API_URL);
+
 async function reg(userToReg) {
   console.log('reg', userToReg);
   const currentUsers = JSON.parse(localStorage.getItem('users') || '[]');
@@ -57,46 +63,44 @@ function removeAuthUser() {
   localStorage.removeItem('authUser');
 }
 
-function sendNote(note) {
-  const notes = getNotesFromLS();
-  note.id = generateID();
-  notes.push(note);
-  localStorage.setItem('notes', JSON.stringify(notes));
+async function sendNote(note) {
+  const response = await fetcher('/notes/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
+    },
+    body: JSON.stringify(note)
+  });
+
+  return response.json();
 }
 
-function generateID() {
-  return '_' + Math.random().toString(36).substr(2, 9);
+async function fetchNotes() {
+  const response = await fetcher('/notes');
+  return response.json();
 }
 
-function fetchNotes() {
-  return getNotesFromLS();
+async function fetchNote(id) {
+  const response = await fetcher(`/notes/${id}`);
+  return response.json();
 }
 
-function fetchNote(id) {
-  const notes = getNotesFromLS();
-  return notes.find(note => note.id === id);
-}
+async function updateNote(id, note) {
+  const response = await fetcher(`/notes/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
+    },
+    body: JSON.stringify(note)
+  });
 
-function getNotesFromLS() {
-  return JSON.parse(localStorage.getItem('notes') || '[]');
-}
-
-function updateNote(noteToUpdate) {
-  const notes = getNotesFromLS();
-  const foundedNote = notes.find(note => note.id === noteToUpdate.id);
-  if (!foundedNote) return;
-
-  foundedNote.src = noteToUpdate.src;
-  foundedNote.text = noteToUpdate.text;
-  console.log(foundedNote === notes[0]);
-
-  localStorage.setItem('notes', JSON.stringify(notes));
+  return response.json();
 }
 
 function deleteNote(id) {
-  const notes = getNotesFromLS();
-  const filteredNotes = notes.filter(note => note.id !== id);
-  localStorage.setItem('notes', JSON.stringify(filteredNotes));
+  return fetcher(`/notes/${id}`, {
+    method: 'DELETE',
+  });
 }
 
 export {reg, login, getAuthUser, removeAuthUser, sendNote, fetchNotes, fetchNote, updateNote, deleteNote};
