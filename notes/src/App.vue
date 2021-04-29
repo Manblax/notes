@@ -5,5 +5,9 @@
 </template>
 
 <style>
-
+.file-label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 </style>
