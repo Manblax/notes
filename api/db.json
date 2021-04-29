@@ -1,0 +1,45 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  },
+  "notes": [
+    {
+      "src": "",
+      "text": "# h1 Heading \n## h2 Heading\n### h3 Heading\n#### h4 Heading\n##### h5 Heading\n###### h6 Heading",
+      "date": 1619442717205,
+      "id": "_owwzodebn"
+    },
+    {
+      "src": "",
+      "text": "## Emphasis\n\n**This is bold text**\n\n__This is bold text__\n\n*This is italic text*\n\n_This is italic text_\n\n~~Strikethrough~~",
+      "date": 1619442725037,
+      "id": "_omw4mcywo"
+    },
+    {
+      "src": "",
+      "text": "Indented code\n\n    // Some comments\n    line 1 of code\n    line 2 of code\n    line 3 of code",
+      "date": 1619442732764,
+      "id": "_uiaod78ms"
+    },
+    {
+      "text": "## page 1234",
+      "src": "",
+      "date": 1619442732764,
+      "id": "Xe5xAzX"
+    }
+  ]
+}

@@ -64,18 +64,23 @@ export default {
 
       return formatter.format(timestamp);
     },
-    deleteNoteHandler(id) {
-      console.log('deleteNoteHandler', id);
+    async deleteNoteHandler(id) {
       try {
-        deleteNote(id);
-        this.notes = this.notes.filter(note => note.id !== id);
+        const response = await deleteNote(id);
+        if (response.status !== 200) {
+          throw new Error('Ошибка при удалении заметки');
+        }
+        await this.getNotes();
       } catch (e) {
         console.log(e);
       }
+    },
+    async getNotes() {
+      this.notes = await fetchNotes();
     }
   },
   created() {
-    this.notes = fetchNotes();
+    this.getNotes();
   },
 }
 </script>

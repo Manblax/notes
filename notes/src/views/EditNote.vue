@@ -30,7 +30,9 @@ export default {
   },
   data() {
     return {
-      note: {},
+      note: {
+        text: ''
+      },
     }
   },
   computed: {
@@ -39,27 +41,26 @@ export default {
     }
   },
   methods: {
-    editNote() {
+    async editNote() {
       if (!this.note.text) return;
       const note = {
-        id: this.note.id,
-        src: '',
         text: this.note.text,
+        src: this.note.src,
       };
       try {
-        updateNote(note);
-        this.$router.push({name: 'Home'});
+        await updateNote(this.note.id, note);
+        await this.$router.push({name: 'Home'});
       } catch (e) {
         console.error(e);
       }
     },
-    setNote() {
+    async getNote() {
       const id = this.$route.params.id;
-      this.note = fetchNote(id);
+      this.note = await fetchNote(id);
     }
   },
   created() {
-    this.setNote();
+    this.getNote();
   }
 }
 </script>

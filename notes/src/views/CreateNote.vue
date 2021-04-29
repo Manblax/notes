@@ -39,7 +39,7 @@ export default {
     }
   },
   methods: {
-    createNote() {
+    async createNote() {
       if (!this.text) return;
       const note = {
         src: '',
@@ -47,8 +47,9 @@ export default {
         date: Date.now()
       };
       try {
-        sendNote(note);
-        this.$router.push({name: 'Home'});
+        const result = await sendNote(note);
+        console.log('result', result)
+        await this.$router.push({name: 'Home'});
       } catch (e) {
         console.error(e);
       }
