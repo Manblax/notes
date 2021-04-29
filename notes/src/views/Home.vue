@@ -4,15 +4,15 @@
     <h1 class="title is-1 mt-4">Список заметок</h1>
     <ul class="mt-3" v-if="notes.length">
       <li v-for="note in notes" :key="note.id" class="notification">
-        <figure class="image is-48x48">
-          <img src="https://bulma.io/images/placeholders/48x48.png">
-        </figure>
         <button
             @click="$modal.show('delete-note', {id: note.id, title: note.text})"
             type="button"
             class="delete"
         />
         <div v-html="compiledMarkdown(note.text)" class="content mt-3"></div>
+        <figure v-if="note.src" class="image is-48x48">
+          <img :src="note.src" alt="image">
+        </figure>
         <time datetime="2016-1-1">{{ formatDate(note.date) }}</time>
         <div class="mt-3">
           <router-link
