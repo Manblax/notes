@@ -9,7 +9,7 @@
     />
 
     <div class="content">
-      <section class="cropper-area">
+      <section>
         <div class="img-cropper">
           <vue-cropper
               ref="cropper"
@@ -19,135 +19,65 @@
           />
         </div>
         <div class="actions">
-          <a
-              href="#"
-              role="button"
-              @click.prevent="zoom(0.2)"
-          >
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="zoom(0.2)">
             Zoom In
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="zoom(-0.2)"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="zoom(-0.2)">
             Zoom Out
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="move(-10, 0)"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="move(-10, 0)">
             Move Left
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="move(10, 0)"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="move(10, 0)">
             Move Right
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="move(0, -10)"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="move(0, -10)">
             Move Up
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="move(0, 10)"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="move(0, 10)">
             Move Down
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="rotate(90)"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="rotate(90)">
             Rotate +90deg
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="rotate(-90)"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="rotate(-90)">
             Rotate -90deg
-          </a>
-          <a
-              ref="flipX"
-              href="#"
-              role="button"
-              @click.prevent="flipX"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" ref="flipX" @click="flipX">
             Flip X
-          </a>
-          <a
-              ref="flipY"
-              href="#"
-              role="button"
-              @click.prevent="flipY"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" ref="flipY" @click="flipY">
             Flip Y
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="cropImage"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="cropImage">
             Crop
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="reset"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="reset">
             Reset
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="getData"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="getData">
             Get Data
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="setData"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="setData">
             Set Data
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="getCropBoxData"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="getCropBoxData">
             Get CropBox Data
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="setCropBoxData"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="setCropBoxData">
             Set CropBox Data
-          </a>
-          <a
-              href="#"
-              role="button"
-              @click.prevent="showFileChooser"
-          >
+          </button>
+          <button type="button" class="button is-link is-small mr-4 mb-4" @click="showFileChooser">
             Upload Image
-          </a>
+          </button>
         </div>
 
-        <textarea v-model="data"/>
+        <textarea v-model="data" class="textarea"/>
       </section>
-      <section class="preview-area">
-        <p>Предосмотр</p>
+      <section>
+        <p class="is-size-5">Предосмотр</p>
         <div class="preview"/>
-        <p>Результат</p>
+        <p class="is-size-5 mt-4">Результат</p>
         <div class="cropped-image">
           <img
               v-if="cropImg"
@@ -170,9 +100,15 @@ export default {
   components: {
     VueCropper,
   },
+  props: {
+    src: {
+      type: String,
+      default: 'https://bulma.io/images/placeholders/256x256.png'
+    }
+  },
   data() {
     return {
-      imgSrc: 'https://bulma.io/images/placeholders/256x256.png',
+      imgSrc: this.src,
       cropImg: '',
       data: null,
     };
@@ -226,17 +162,13 @@ export default {
         alert('Please select an image file');
         return;
       }
-      if (typeof FileReader === 'function') {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          this.imgSrc = event.target.result;
-          // rebuild cropperjs with the updated source
-          this.$refs.cropper.replace(event.target.result);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        alert('Sorry, FileReader API not supported');
-      }
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        this.imgSrc = event.target.result;
+        // rebuild cropperjs with the updated source
+        this.$refs.cropper.replace(event.target.result);
+      };
+      reader.readAsDataURL(file);
     },
     showFileChooser() {
       this.$refs.input.click();
@@ -245,10 +177,15 @@ export default {
       this.$refs.cropper.relativeZoom(percent);
     },
   },
+  watch: {
+    src() {
+      this.imgSrc = this.src;
+      this.$refs.cropper.replace(this.imgSrc);
+    }
+  }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -260,63 +197,20 @@ input[type="file"] {
   display: none;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0 5px 0;
-}
-
-.header h2 {
-  margin: 0;
-}
-
-.header a {
-  text-decoration: none;
-  color: black;
-}
-
 .content {
-  display: flex;
+  display: grid;
   justify-content: space-between;
-}
-
-.cropper-area {
-  width: 614px;
+  grid-template-columns: 614px 307px;
+  grid-gap: 40px;
 }
 
 .actions {
   margin-top: 1rem;
 }
 
-.actions a {
-  display: inline-block;
-  padding: 5px 15px;
-  background: #0062CC;
-  color: white;
-  text-decoration: none;
-  border-radius: 3px;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
-}
-
-textarea {
+.textarea {
   width: 100%;
   height: 100px;
-}
-
-.preview-area {
-  width: 307px;
-}
-
-.preview-area p {
-  font-size: 1.25rem;
-  margin: 0;
-  margin-bottom: 1rem;
-}
-
-.preview-area p:last-of-type {
-  margin-top: 1rem;
 }
 
 .preview {
