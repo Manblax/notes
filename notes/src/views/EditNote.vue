@@ -1,24 +1,9 @@
 <template>
-  <div class="container is-max-desktop">
+  <div class="container is-max-widescreen">
     <NavBar></NavBar>
     <h1 class="title is-1 mt-4">Редактировать заметку</h1>
     <form @submit.prevent="editNote" class="box">
-      <div class="file has-name mb-4">
-        <label class="file-label">
-          <input class="file-input" type="file" name="resume" @change="onChange">
-          <span class="file-cta">
-            <span class="file-label">
-              Выберите файл
-            </span>
-          </span>
-          <span class="file-name">
-            {{ note.filename }}
-          </span>
-        </label>
-      </div>
-      <figure v-if="note.src" class="image is-128x128">
-        <img :src="note.src" alt="thumbnail">
-      </figure>
+      <CropperBox :src="note.src" @cropped="changeSrc"></CropperBox>
       <div class="field">
         <label class="label">Name</label>
         <div class="control">
@@ -38,18 +23,18 @@
 import marked from "marked/lib/marked.esm";
 import {updateNote, fetchNote} from "../api";
 import NavBar from "../components/NavBar";
+import CropperBox from "../components/CropperBox";
 
 export default {
   name: 'EditNote',
   components: {
-    NavBar
+    NavBar,
+    CropperBox
   },
   data() {
     return {
       note: {
         text: '',
-        file: '',
-        filename: 'Файл не выбран',
         src: '',
       },
     }
@@ -77,28 +62,8 @@ export default {
       const id = this.$route.params.id;
       this.note = await fetchNote(id);
     },
-    setThumbnail(event) {
-      if (event.target.files) {
-        const file = event.target.files[0];
-
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-
-        reader.addEventListener('load', () => {
-          this.src = reader.result;
-        });
-
-        reader.addEventListener('error', () => {
-          console.log('Ошибка при загрузке файла')
-        });
-      }
-    },
-    onChange(event) {
-      this.changeFileName(event);
-      this.setThumbnail(event);
-    },
-    changeFileName(event) {
-      this.note.filename = event.target.value.split('\\').pop() || 'Файл не выбран';
+    changeSrc(src) {
+      this.note.src = src;
     }
   },
   created() {
