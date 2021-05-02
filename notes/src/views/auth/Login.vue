@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import {login} from '/src/api';
+import {login} from '../../api';
 
 export default {
   name: "Login",
@@ -45,16 +45,11 @@ export default {
       };
 
       try {
-        const result = await login(user);
-        if (result.success) {
-          await this.$router.push({name: 'Home'});
-        } else {
-          this.errorMsg = result.error;
-        }
-        console.log(result);
+        await login(user);
+        await this.$router.push({name: 'Home'});
       } catch (err) {
         console.error(err);
-        this.errorMsg = 'Неизвестная ошибка';
+        this.errorMsg = err.message;
       }
     }
   }

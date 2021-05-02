@@ -4,55 +4,50 @@ function fetchAbsolute(baseUrl) {
 
 const fetcher = fetchAbsolute(process.env.VUE_APP_API_URL);
 
-async function reg(userToReg) {
-  console.log('reg', userToReg);
-  const currentUsers = JSON.parse(localStorage.getItem('users') || '[]');
+async function reg(user) {
+  const response = await fetcher('/register/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
+    },
+    body: JSON.stringify(user)
+  });
 
-  if (!currentUsers.length) {
-    pushUserToLS(userToReg);
-    return {success: 'Пользователь зарегистрирован'};
+  const result = await response.json();
+
+  if (response.status !== 201) {
+    throw new Error(result);
   }
 
-  const isExist = currentUsers.some(user => user.email === userToReg.email);
-
-  if (isExist) {
-    return {error: 'Данный пользователь уже есть в системе'};
-  } else {
-    pushUserToLS(userToReg);
-    return {success: 'Пользователь зарегистрирован'};
-  }
-
-  function pushUserToLS(userToReg) {
-    currentUsers.push(userToReg);
-    localStorage.setItem('users', JSON.stringify(currentUsers));
-  }
+  return result;
 }
 
-async function login(userToAuth) {
-  console.log('user', userToAuth);
+async function login(user) {
+  const response = await fetcher('/login/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
+    },
+    body: JSON.stringify(user)
+  });
 
-  const currentUsers = JSON.parse(localStorage.getItem('users') || '[]');
-  const foundUser = currentUsers.find(user => user.email === userToAuth.email);
+  const result = await response.json();
 
-  if (!foundUser) {
-    return {error: 'Данный пользователь не зарегистрирован'};
+  if (response.status !== 200) {
+    throw new Error(result);
   }
 
-  const authUser = getAuthUser();
-  if (!authUser) {
-    if ((foundUser.email === userToAuth.email) && (foundUser.password === userToAuth.password)) {
-      localStorage.setItem('authUser', JSON.stringify(userToAuth));
-      return {success: 'Пользователь авторизован'};
-    } else {
-      return {error: 'Неверный логин и/или пароль'};
+  if (result.accessToken) {
+    const authUser = {
+      accessToken: result.accessToken,
+      email: user.email,
     }
+    localStorage.setItem('authUser', JSON.stringify(authUser));
   } else {
-    if ((authUser.email === userToAuth.email) && (authUser.password === userToAuth.password)) {
-      return {success: 'Пользователь уже авторизован'};
-    } else {
-      return {error: 'Неизвестная ошибка'};
-    }
+    throw new Error('Нет токена');
   }
+
+  return result;
 }
 
 function getAuthUser() {

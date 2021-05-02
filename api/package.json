@@ -4,11 +4,12 @@
   "description": "fakeapi",
   "main": "index.js",
   "scripts": {
-    "api": "json-server --watch db.json"
+    "api": "json-server-auth db.json"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "json-server": "^0.16.3"
+    "json-server": "^0.16.3",
+    "json-server-auth": "^2.0.2"
   }
 }
