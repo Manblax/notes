@@ -55,24 +55,11 @@
           <button type="button" class="button is-link is-small mr-4 mb-4" @click="reset">
             Reset
           </button>
-          <button type="button" class="button is-link is-small mr-4 mb-4" @click="getData">
-            Get Data
-          </button>
-          <button type="button" class="button is-link is-small mr-4 mb-4" @click="setData">
-            Set Data
-          </button>
-          <button type="button" class="button is-link is-small mr-4 mb-4" @click="getCropBoxData">
-            Get CropBox Data
-          </button>
-          <button type="button" class="button is-link is-small mr-4 mb-4" @click="setCropBoxData">
-            Set CropBox Data
-          </button>
           <button type="button" class="button is-link is-small mr-4 mb-4" @click="showFileChooser">
             Upload Image
           </button>
         </div>
 
-        <textarea v-model="data" class="textarea"/>
       </section>
       <section>
         <p class="is-size-5">Предосмотр</p>
@@ -110,7 +97,6 @@ export default {
     return {
       imgSrc: this.src,
       cropImg: '',
-      data: null,
     };
   },
   methods: {
@@ -133,12 +119,6 @@ export default {
       this.$refs.cropper.scaleY(scale);
       dom.setAttribute('data-scale', scale);
     },
-    getCropBoxData() {
-      this.data = JSON.stringify(this.$refs.cropper.getCropBoxData(), null, 4);
-    },
-    getData() {
-      this.data = JSON.stringify(this.$refs.cropper.getData(), null, 4);
-    },
     move(offsetX, offsetY) {
       this.$refs.cropper.move(offsetX, offsetY);
     },
@@ -147,14 +127,6 @@ export default {
     },
     rotate(deg) {
       this.$refs.cropper.rotate(deg);
-    },
-    setCropBoxData() {
-      if (!this.data) return;
-      this.$refs.cropper.setCropBoxData(JSON.parse(this.data));
-    },
-    setData() {
-      if (!this.data) return;
-      this.$refs.cropper.setData(JSON.parse(this.data));
     },
     setImage(e) {
       const file = e.target.files[0];
@@ -206,11 +178,6 @@ input[type="file"] {
 
 .actions {
   margin-top: 1rem;
-}
-
-.textarea {
-  width: 100%;
-  height: 100px;
 }
 
 .preview {
