@@ -42,8 +42,7 @@ export default {
         date: Date.now()
       };
       try {
-        const result = await sendNote(note);
-        console.log('result', result)
+        await sendNote(note);
         await this.$router.push({name: 'Home'});
       } catch (e) {
         console.error(e);

@@ -32,8 +32,9 @@
 
 <script>
 
+import {formatDate} from "../utils";
 import {fetchNotes, deleteNote} from "../api";
-import NavBar from "@/components/NavBar";
+import NavBar from "../components/NavBar";
 import marked from "marked/lib/marked.esm";
 import DeleteNote from "../components/DeleteNote";
 
@@ -41,7 +42,7 @@ export default {
   name: 'Home',
   components: {
     NavBar,
-    DeleteNote
+    DeleteNote,
   },
   data() {
     return {
@@ -49,20 +50,11 @@ export default {
     }
   },
   methods: {
+    formatDate(timestamp){
+      return formatDate(timestamp);
+    },
     compiledMarkdown(text) {
       return marked(text);
-    },
-    formatDate(timestamp) {
-      if (!timestamp) return;
-      const formatter = new Intl.DateTimeFormat("ru", {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric'
-      });
-
-      return formatter.format(timestamp);
     },
     async deleteNoteHandler(id) {
       try {
@@ -77,6 +69,11 @@ export default {
     },
     async getNotes() {
       this.notes = await fetchNotes();
+    }
+  },
+  watch: {
+    notes() {
+      localStorage.setItem('notes', JSON.stringify(this.notes));
     }
   },
   created() {

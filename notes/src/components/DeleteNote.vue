@@ -11,13 +11,12 @@
       Вы уверены что хотите удалить заметку {{ truncatedTitle }} ?
     </span>
     <div class="modal__content">
-
+      <slot></slot>
     </div>
     <div class="modal__action">
       <button class="button is-small is-primary mr-4" @click="deleteNoteHandler">Да</button>
       <button class="button is-small" @click="hide">Нет</button>
     </div>
-
   </vue-final-modal>
 </template>
 
@@ -50,9 +49,6 @@ export default {
       this.title = event.ref.params.value.title;
     }
   },
-  mounted() {
-    //this.$modal.show('delete-note');
-  }
 }
 </script>
 

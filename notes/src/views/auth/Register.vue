@@ -3,14 +3,14 @@
     <h1 class="title is-1">Регистрация</h1>
     <form @submit.prevent="submit" class="box">
       <div class="field">
-        <label class="label">Name</label>
+        <label class="label">ФИО</label>
         <div class="control">
           <input v-model="name" class="input" type="text" placeholder="Name" required>
         </div>
       </div>
 
       <div class="field">
-        <label class="label">Username</label>
+        <label class="label">Имя пользователя</label>
         <div class="control">
           <input v-model="userName" class="input" type="text" placeholder="Username" required>
         </div>
