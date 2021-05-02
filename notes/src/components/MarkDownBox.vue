@@ -1,12 +1,18 @@
 <template>
-  <div class="field">
-    <label class="label">Name</label>
-    <div class="control">
-      <textarea v-model="text" class="textarea" placeholder="Note" required></textarea>
+  <label class="label">Текст</label>
+  <div class="columns">
+    <div class="column is-6">
+      <div class="field">
+        <div class="control">
+          <textarea v-model="text" class="textarea" placeholder="Введите текст" required></textarea>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="box">
-    <div v-html="compiledMarkdown" class="content"></div>
+    <div class="column is-6" v-if="text">
+      <div class="box">
+        <div v-html="compiledMarkdown" class="content"></div>
+      </div>
+    </div>
   </div>
 </template>
 
