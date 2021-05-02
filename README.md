@@ -32,8 +32,6 @@ npm install
 npm run api
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
 ### Used technologies and libraries
 #### Notes
 CSS Framework - Bulma https://bulma.io/ минималистичный CSS Фреймворк как раз для данного проекта
