@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import {getAuthUser, removeAuthUser} from '/src/api';
+import {getAuthUser, removeAuthUser} from '../api';
 
 export default {
   name: "NavBar",

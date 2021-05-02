@@ -61,15 +61,11 @@ export default {
         password: this.password
       };
       try {
-        const result = await reg(user);
-        if (result.success) {
-          await this.$router.push({name: 'Home'});
-        } else {
-          this.errorMsg = result.error;
-        }
+        await reg(user);
+        await this.$router.push({name: 'Home'});
       } catch (err) {
         console.error(err);
-        this.errorMsg = 'Неизвестная ошибка';
+        this.errorMsg = err.message;
       }
     }
   }
