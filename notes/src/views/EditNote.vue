@@ -4,15 +4,7 @@
     <h1 class="title is-1 mt-4">Редактировать заметку</h1>
     <form @submit.prevent="editNote" class="box">
       <CropperBox :src="note.src" @cropped="changeSrc"></CropperBox>
-      <div class="field">
-        <label class="label">Name</label>
-        <div class="control">
-          <textarea v-model="note.text" class="textarea" placeholder="Note" required></textarea>
-        </div>
-      </div>
-      <div class="box">
-        <div v-html="compiledMarkdown" class="content"></div>
-      </div>
+      <MarkDownBox :prop-text="note.text" @text-updated="updateText"></MarkDownBox>
       <button type="submit" class="button is-link">Редактировать</button>
     </form>
   </div>
@@ -20,16 +12,17 @@
 
 <script>
 
-import marked from "marked/lib/marked.esm";
 import {updateNote, fetchNote} from "../api";
 import NavBar from "../components/NavBar";
 import CropperBox from "../components/CropperBox";
+import MarkDownBox from "../components/MarkDownBox";
 
 export default {
   name: 'EditNote',
   components: {
     NavBar,
-    CropperBox
+    CropperBox,
+    MarkDownBox
   },
   data() {
     return {
@@ -39,12 +32,10 @@ export default {
       },
     }
   },
-  computed: {
-    compiledMarkdown() {
-      return marked(this.note.text);
-    }
-  },
   methods: {
+    updateText(text) {
+      this.note.text = text;
+    },
     async editNote() {
       if (!this.note.text) return;
       const note = {
