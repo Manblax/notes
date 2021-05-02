@@ -4,7 +4,7 @@
       <input class="file-input" type="file" name="resume" accept="image/*" @change="changeFileName">
       <span class="file-cta">
         <span class="file-label">
-          <slot></slot>
+          <slot>Выберите файл</slot>
         </span>
       </span>
       <span class="file-name">
@@ -19,18 +19,22 @@ export default {
   name: "FileInput",
   data() {
     return {
-      filename: '',
+      filename: 'Файл не выбран',
     }
   },
   methods: {
     changeFileName(event) {
       this.filename = event.target.value.split('\\').pop() || 'Файл не выбран';
-      this.$emit('file-changed', event.target.files);
+      this.$emit('file-changed', event);
     },
   }
 }
 </script>
 
 <style scoped>
-
+.file-label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 </style>

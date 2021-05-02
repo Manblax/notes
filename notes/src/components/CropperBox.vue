@@ -1,13 +1,5 @@
 <template>
   <div>
-    <input
-        ref="input"
-        type="file"
-        name="image"
-        accept="image/*"
-        @change="setImage"
-    />
-
     <div class="content">
       <section>
         <div class="img-cropper">
@@ -55,20 +47,19 @@
           <button type="button" class="button is-link is-small mr-4 mb-4" @click="reset">
             Reset
           </button>
-          <button type="button" class="button is-link is-small mr-4 mb-4" @click="showFileChooser">
-            Upload Image
-          </button>
         </div>
+        <FileInput @file-changed="setImage" class="mt-4"></FileInput>
 
       </section>
       <section>
         <p class="is-size-5">Предосмотр</p>
         <div class="preview"/>
         <p class="is-size-5 mt-4">Результат</p>
-        <div class="cropped-image">
+        <div>
           <img
               v-if="cropImg"
               :src="cropImg"
+              class="cropped-image"
               alt="Cropped Image"
           />
           <div v-else class="crop-placeholder"/>
@@ -79,6 +70,7 @@
 </template>
 
 <script>
+import FileInput from "./FileInput";
 import VueCropper from 'vue-cropperjs';
 import 'cropperjs/dist/cropper.css';
 
@@ -86,6 +78,7 @@ export default {
   name: "CropperBox",
   components: {
     VueCropper,
+    FileInput
   },
   props: {
     src: {
@@ -142,9 +135,6 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    showFileChooser() {
-      this.$refs.input.click();
-    },
     zoom(percent) {
       this.$refs.cropper.relativeZoom(percent);
     },
@@ -159,16 +149,6 @@ export default {
 </script>
 
 <style scoped>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  width: 1024px;
-  margin: 0 auto;
-}
-
-input[type="file"] {
-  display: none;
-}
-
 .content {
   display: grid;
   justify-content: space-between;
@@ -192,7 +172,4 @@ input[type="file"] {
   background: #ccc;
 }
 
-.cropped-image img {
-  max-width: 100%;
-}
 </style>

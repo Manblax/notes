@@ -3,7 +3,7 @@
     <NavBar></NavBar>
     <h1 class="title is-1 mt-4">Создать заметку</h1>
     <form @submit.prevent="createNote" class="box">
-      <CropperBox @cropped="changeSrc"></CropperBox>
+      <CropperBox @cropped="changeSrc" class="mb-6"></CropperBox>
       <MarkDownBox @text-updated="updateText"></MarkDownBox>
       <button type="submit" class="button is-link">Создать</button>
     </form>
