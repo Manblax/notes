@@ -20,6 +20,18 @@ npm run build
 npm run lint
 ```
 
+# fake api
+
+## Project setup
+```
+npm install
+```
+
+### run for development
+```
+npm run api
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 ### Used technologies and libraries
