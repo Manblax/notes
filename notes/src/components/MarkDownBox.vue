@@ -4,11 +4,11 @@
     <div class="column is-6">
       <div class="field">
         <div class="control">
-          <textarea v-model="text" class="textarea" placeholder="Введите текст" required></textarea>
+          <textarea :value="desc" @input="onInput" class="textarea" placeholder="Введите текст" required></textarea>
         </div>
       </div>
     </div>
-    <div class="column is-6" v-if="text">
+    <div class="column is-6" v-if="desc">
       <div class="box">
         <div v-html="compiledMarkdown" class="content"></div>
       </div>
@@ -22,30 +22,22 @@ import marked from "marked/lib/marked.esm";
 export default {
   name: "MarkDownBox",
   props: {
-    propText: {
+    desc: {
       type: String,
       default: ''
     },
   },
-  emits: ['text-updated'],
-  data() {
-    return {
-      text: this.propText
-    }
-  },
+  emits: ['update:desc'],
   computed: {
     compiledMarkdown() {
-      return marked(this.text);
+      return marked(this.desc);
     }
   },
-  watch: {
-    text() {
-      this.$emit('text-updated', this.text);
-    },
-    propText() {
-      this.text = this.propText;
+  methods: {
+    onInput(event) {
+      this.$emit('update:desc', event.target.value);
     }
-  }
+  },
 }
 </script>
 

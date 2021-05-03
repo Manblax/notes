@@ -4,7 +4,7 @@
     <h1 class="title is-1 mt-4">Редактировать заметку</h1>
     <form @submit.prevent="editNote" class="box">
       <CropperBox :src="note.src" @cropped="changeSrc" class="mb-6"></CropperBox>
-      <MarkDownBox :prop-text="note.text" @text-updated="updateText"></MarkDownBox>
+      <MarkDownBox v-model:desc="note.text"></MarkDownBox>
       <button type="submit" class="button is-link">Редактировать</button>
     </form>
   </div>
@@ -33,9 +33,6 @@ export default {
     }
   },
   methods: {
-    updateText(text) {
-      this.note.text = text;
-    },
     async editNote() {
       if (!this.note.text) return;
       const note = {
