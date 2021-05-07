@@ -4,7 +4,7 @@
   "description": "fakeapi",
   "main": "index.js",
   "scripts": {
-    "api": "json-server-auth db.json"
+    "api": "json-server-auth --host 0.0.0.0 db.json"
   },
   "author": "",
   "license": "ISC",
