@@ -2,18 +2,18 @@
   <div class="container is-max-desktop">
     <NavBar></NavBar>
     <h1 class="title is-1 mt-4">Список заметок</h1>
-    <ul class="mt-3" v-if="notes.length">
-      <li v-for="note in notes" :key="note.id" class="notification">
+    <ul class="mt-3" v-if="notes">
+      <li v-for="note in notes.results" :key="note.id" class="notification">
         <button
-            @click="$modal.show('delete-note', {id: note.id, title: note.text})"
+            @click="$modal.show('delete-note', {id: note.id, title: note.code})"
             type="button"
             class="delete"
         />
-        <div v-html="compiledMarkdown(note.text)" class="content mt-3"></div>
-        <figure v-if="note.src" class="image is-48x48">
-          <img :src="note.src" alt="image">
+        <div v-html="compiledMarkdown(note.code)" class="content mt-3"></div>
+        <figure v-if="note.file" class="image is-48x48">
+          <img :src="note.file" alt="image">
         </figure>
-        <time datetime="2016-1-1">{{ formatDate(note.date) }}</time>
+        <time datetime="2016-1-1">{{ formatDate(new Date(note.created)) }}</time>
         <div class="mt-3">
           <router-link
               :to="{name: 'EditNote', params: {id: note.id}}"
@@ -46,7 +46,7 @@ export default {
   },
   data() {
     return {
-      notes: []
+      notes: null
     }
   },
   methods: {
@@ -59,7 +59,7 @@ export default {
     async deleteNoteHandler(id) {
       try {
         const response = await deleteNote(id);
-        if (response.status !== 200) {
+        if (response.status !== 204) {
           throw new Error('Ошибка при удалении заметки');
         }
         await this.getNotes();
@@ -68,7 +68,11 @@ export default {
       }
     },
     async getNotes() {
-      this.notes = await fetchNotes();
+      try{
+        this.notes = await fetchNotes();
+      } catch (e) {
+        console.log(e);
+      }
     }
   },
   watch: {
