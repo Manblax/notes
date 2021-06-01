@@ -1,42 +1,49 @@
 <template>
-  <div class="container is-max-widescreen">
-    <NavBar></NavBar>
-    <h1 class="title is-1 mt-4">Редактировать заметку</h1>
-    <form @submit.prevent="editNote" class="box">
-      <CropperBox :src="note.src" @cropped="changeSrc" class="mb-6"></CropperBox>
-      <MarkDownBox v-model:desc="note.text"></MarkDownBox>
-      <button type="submit" class="button is-link">Редактировать</button>
-    </form>
-  </div>
+  <h1 class="title is-1 mt-4">Редактировать заметку</h1>
+  <form @submit.prevent="editNote" class="box">
+    <CropperBox :src="note.src" @cropped="changeSrc" class="mb-6"></CropperBox>
+    <MarkDownBox v-model:desc="note.code"></MarkDownBox>
+    <button type="submit" class="button is-link">Редактировать</button>
+  </form>
 </template>
 
 <script>
 
 import {updateNote, fetchNote} from "../api";
-import NavBar from "../components/NavBar";
 import CropperBox from "../components/CropperBox";
 import MarkDownBox from "../components/MarkDownBox";
 
 export default {
   name: 'EditNote',
   components: {
-    NavBar,
     CropperBox,
     MarkDownBox
   },
   data() {
     return {
       note: {
-        text: '',
+        code: '',
         src: '',
       },
     }
   },
   methods: {
     async editNote() {
-      if (!this.note.text) return;
+
+      if (!this.note.code) return;
+
+      const formData = new FormData();
+      formData.append('code', this.note.code);
+
+      if (this.src) {
+        const res = await fetch(this.src);
+        const blob = await res.blob();
+        formData.append('file', blob, this.fileName);
+      }
+
+      if (!this.note.code) return;
       const note = {
-        text: this.note.text,
+        code: this.note.code,
         src: this.note.src,
       };
       try {
