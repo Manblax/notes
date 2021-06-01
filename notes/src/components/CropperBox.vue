@@ -48,7 +48,7 @@
             Reset
           </button>
         </div>
-        <FileInput @file-changed="setImage" class="mt-4"></FileInput>
+        <FileInput @file-changed="setImage"  class="mt-4"></FileInput>
 
       </section>
       <section>
@@ -83,20 +83,22 @@ export default {
   props: {
     src: {
       type: String,
-      default: 'https://bulma.io/images/placeholders/256x256.png'
+      default: ''
     }
   },
   data() {
     return {
       imgSrc: this.src,
       cropImg: '',
+      fileName: '',
     };
   },
   methods: {
     cropImage() {
       // get image data for post processing, e.g. upload or setting image src
       this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
-      this.$emit('cropped', this.cropImg);
+      console.log('this.cromImg', this.cropImg)
+      this.$emit('cropped', {src: this.cropImg, name: this.fileName});
     },
     flipX() {
       const dom = this.$refs.flipX;
@@ -132,6 +134,8 @@ export default {
         this.imgSrc = event.target.result;
         // rebuild cropperjs with the updated source
         this.$refs.cropper.replace(event.target.result);
+        this.fileName = e.target.files[0].name;
+        this.$emit('cropped', {src: this.imgSrc, name: this.fileName});
       };
       reader.readAsDataURL(file);
     },
