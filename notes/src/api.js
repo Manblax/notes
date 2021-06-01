@@ -1,18 +1,26 @@
-function fetchAbsolute(baseUrl) {
-  return (url, ...otherParams) => url.startsWith('/') ? fetch(baseUrl + url, ...otherParams) : fetch(url, ...otherParams);
-}
+import wretch from "wretch"
 
-const fetcher = fetchAbsolute(process.env.VUE_APP_API_URL);
+const authMiddleware = next => (url, opts) => {
+  const user = getAuthUser();
+  if (user?.token) {
+    if (opts.headers) {
+      opts.headers['Authorization'] = `Token ${user.token}`;
+    } else {
+      opts.headers = {'Authorization': `Token ${user.token}`};
+    }
+  }
+  return next(url, opts);
+};
+
+
+/**
+ * @description Дефолтный конфиг wretch
+ */
+
+const fetcher = wretch(process.env.VUE_APP_API_URL).middlewares([authMiddleware]);
 
 async function reg(user) {
-  const response = await fetcher('/register/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    },
-    body: JSON.stringify(user)
-  });
-
+  const response = await fetcher.url('/register/').json(user).post().res();
   const result = await response.json();
 
   if (response.status !== 201) {
@@ -23,24 +31,18 @@ async function reg(user) {
 }
 
 async function login(user) {
-  const response = await fetcher('/login/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    },
-    body: JSON.stringify(user)
-  });
-
+  const response = await fetcher.url('/auth/token/login/').json(user).post().res();
+  console.log('response', response)
   const result = await response.json();
 
   if (response.status !== 200) {
-    throw new Error(result);
+    throw new Error(result.detail);
   }
 
-  if (result.accessToken) {
+  if (result.auth_token) {
     const authUser = {
-      accessToken: result.accessToken,
-      email: user.email,
+      token: result.auth_token,
+      email: user.username,
     }
     localStorage.setItem('authUser', JSON.stringify(authUser));
   } else {
@@ -59,43 +61,23 @@ function removeAuthUser() {
 }
 
 async function sendNote(note) {
-  const response = await fetcher('/notes/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    },
-    body: JSON.stringify(note)
-  });
-
-  return response.json();
+  return fetcher.url('/notes/').body(note).post().json();
 }
 
 async function fetchNotes() {
-  const response = await fetcher('/notes');
-  return response.json();
+  return fetcher.url('/notes/').get().json();
 }
 
 async function fetchNote(id) {
-  const response = await fetcher(`/notes/${id}`);
-  return response.json();
+  return fetcher.url(`/notes/${id}`).get().json();
 }
 
 async function updateNote(id, note) {
-  const response = await fetcher(`/notes/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    },
-    body: JSON.stringify(note)
-  });
-
-  return response.json();
+  return fetcher.url(`/notes/${id}/`).json(note).patch().json();
 }
 
 function deleteNote(id) {
-  return fetcher(`/notes/${id}`, {
-    method: 'DELETE',
-  });
+  return fetcher.url(`/notes/${id}/`).delete().res();
 }
 
 export {reg, login, getAuthUser, removeAuthUser, sendNote, fetchNotes, fetchNote, updateNote, deleteNote};
