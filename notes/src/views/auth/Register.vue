@@ -1,38 +1,38 @@
 <template>
-  <div class="container is-max-desktop">
-    <h1 class="title is-1">Регистрация</h1>
-    <form @submit.prevent="submit" class="box">
-      <div class="field">
-        <label class="label">ФИО</label>
-        <div class="control">
-          <input v-model="name" class="input" type="text" placeholder="Name" required>
-        </div>
+  <h1 class="title is-1">Регистрация</h1>
+  <form @submit.prevent="submit" class="box">
+    <div class="field">
+      <label class="label">ФИО</label>
+      <div class="control">
+        <input v-model="name" class="input" type="text" placeholder="Name" required>
       </div>
+    </div>
 
-      <div class="field">
-        <label class="label">Имя пользователя</label>
-        <div class="control">
-          <input v-model="userName" class="input" type="text" placeholder="Username" required>
-        </div>
+    <div class="field">
+      <label class="label">Имя пользователя</label>
+      <div class="control">
+        <input v-model="userName" class="input" type="text" placeholder="Username" required>
       </div>
+    </div>
 
-      <div class="field">
-        <label class="label">Email</label>
-        <div class="control">
-          <input v-model="email" class="input" type="email" placeholder="Email" required>
-        </div>
+    <div class="field">
+      <label class="label">Email</label>
+      <div class="control">
+        <input v-model="email" class="input" type="email" placeholder="Email" required>
       </div>
-      <div class="field">
-        <label class="label">Пароль</label>
-        <div class="control">
-          <input v-model="password" class="input" type="password" placeholder="password" required minlength="4">
-        </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Пароль</label>
+      <div class="control">
+        <input v-model="password" class="input" type="password" placeholder="password" required minlength="4">
       </div>
-      <p v-if="errorMsg" class="help is-danger">{{ errorMsg }}</p>
-      <button class="button is-link">Зарегистрироваться</button>
-      <router-link :to="{name: 'Login'}" class="button is-link is-outlined ml-4">Ко входу</router-link>
-    </form>
-  </div>
+    </div>
+
+    <p v-if="errorMsg" class="help is-danger">{{ errorMsg }}</p>
+    <button class="button is-link">Зарегистрироваться</button>
+    <router-link :to="{name: 'Login'}" class="button is-link is-outlined ml-4">Ко входу</router-link>
+  </form>
 </template>
 
 <script>
