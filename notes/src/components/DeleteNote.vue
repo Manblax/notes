@@ -7,9 +7,7 @@
       @beforeOpen="getParamsData"
   >
     <button @click="hide" type="button" class="delete modal__close"></button>
-    <span class="modal__title">
-      Вы уверены что хотите удалить заметку {{ truncatedTitle }} ?
-    </span>
+    <span class="modal__title">Вы уверены что хотите удалить заметку {{ truncatedTitle }} ?</span>
     <div class="modal__content">
       <slot></slot>
     </div>
@@ -24,6 +22,7 @@
 
 export default {
   name: "DeleteNote",
+  emits: ['delete-note'],
   data() {
     return {
       showModal: false,
@@ -42,7 +41,7 @@ export default {
     },
     deleteNoteHandler() {
       this.$emit('delete-note', this.id);
-      this.$modal.hide('delete-note');
+      this.hide();
     },
     getParamsData(event) {
       this.id = event.ref.params.value.id;
