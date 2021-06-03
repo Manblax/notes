@@ -69,11 +69,11 @@ async function fetchNotes() {
 }
 
 async function fetchNote(id) {
-  return fetcher.url(`/notes/${id}`).get().json();
+  return fetcher.url(`/notes/${id}/`).get().json();
 }
 
 async function updateNote(id, note) {
-  return fetcher.url(`/notes/${id}/`).json(note).patch().json();
+  return fetcher.url(`/notes/${id}/`).body(note).patch().json();
 }
 
 function deleteNote(id) {
