@@ -1,7 +1,7 @@
 <template>
   <h1 class="title is-1 mt-4">Редактировать заметку</h1>
   <form @submit.prevent="editNote" class="box">
-    <CropperBox :src="note.src" @cropped="changeSrc" class="mb-6"></CropperBox>
+    <CropperBox :src="note.file" @cropped="changeSrc" class="mb-6"></CropperBox>
     <MarkDownBox v-model:desc="note.code"></MarkDownBox>
     <button type="submit" class="button is-link">Редактировать</button>
   </form>
@@ -23,31 +23,32 @@ export default {
     return {
       note: {
         code: '',
-        src: '',
       },
+      src: '',
+      fileName: '',
     }
   },
   methods: {
     async editNote() {
-
       if (!this.note.code) return;
 
       const formData = new FormData();
       formData.append('code', this.note.code);
 
       if (this.src) {
-        const res = await fetch(this.src);
-        const blob = await res.blob();
-        formData.append('file', blob, this.fileName);
+        try {
+          const res = await fetch(this.src);
+          const blob = await res.blob();
+
+          this.fileName = this.note.file.match(/[^/]*$/);
+          formData.append('file', blob, this.fileName);
+        } catch (e) {
+          console.log(e);
+        }
       }
 
-      if (!this.note.code) return;
-      const note = {
-        code: this.note.code,
-        src: this.note.src,
-      };
       try {
-        await updateNote(this.note.id, note);
+        await updateNote(this.note.id, formData);
         await this.$router.push({name: 'Home'});
       } catch (e) {
         console.error(e);
@@ -55,14 +56,20 @@ export default {
     },
     async getNote() {
       const id = this.$route.params.id;
-      this.note = await fetchNote(id);
+      try {
+        this.note = await fetchNote(id);
+      } catch (e) {
+        console.log(e);
+      }
     },
-    changeSrc(src) {
-      this.note.src = src;
-    }
+    changeSrc(file) {
+      this.src = file.src;
+      this.fileName = file.name;
+    },
   },
   created() {
     this.getNote();
+    console.log('created');
   }
 }
 </script>

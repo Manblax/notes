@@ -34,9 +34,13 @@ export default {
       formData.append('code', this.code);
 
       if (this.src) {
-        const res = await fetch(this.src);
-        const blob = await res.blob();
-        formData.append('file', blob, this.fileName);
+        try {
+          const res = await fetch(this.src);
+          const blob = await res.blob();
+          formData.append('file', blob, this.fileName);
+        } catch (e) {
+          console.log(e);
+        }
       }
 
       try {
@@ -47,7 +51,6 @@ export default {
       }
     },
     changeFile(file) {
-      console.log('file')
       this.src = file.src;
       this.fileName = file.name;
     }
