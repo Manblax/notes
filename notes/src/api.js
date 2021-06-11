@@ -20,7 +20,7 @@ const authMiddleware = next => (url, opts) => {
 const fetcher = wretch(process.env.VUE_APP_API_URL).middlewares([authMiddleware]);
 
 async function reg(user) {
-  const response = await fetcher.url('/register/').json(user).post().res();
+  const response = await fetcher.url('/auth/users/').json(user).post().res();
   const result = await response.json();
 
   if (response.status !== 201) {
@@ -28,6 +28,10 @@ async function reg(user) {
   }
 
   return result;
+}
+
+async function me() {
+  return fetcher.url('/auth/users/me/').get().json();
 }
 
 async function login(user) {
@@ -80,4 +84,4 @@ function deleteNote(id) {
   return fetcher.url(`/notes/${id}/`).delete().res();
 }
 
-export {reg, login, getAuthUser, removeAuthUser, sendNote, fetchNotes, fetchNote, updateNote, deleteNote};
+export {reg, login, getAuthUser, removeAuthUser, sendNote, fetchNotes, fetchNote, updateNote, deleteNote, me};
