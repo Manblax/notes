@@ -1,21 +1,10 @@
 <template>
-  <div class="container is-max-desktop">
-    <NavBar></NavBar>
-    <slot></slot>
+  <div>
+    <slot/>
   </div>
 </template>
-
 <script>
-import NavBar from "../components/NavBar";
-
 export default {
-  name: "AppLayoutDefault",
-  components: {
-    NavBar
-  }
+  name: "AppLayoutDefault"
 }
 </script>
-
-<style scoped>
-
-</style>
