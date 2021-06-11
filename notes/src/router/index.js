@@ -16,7 +16,7 @@ const routes = [
     name: 'CreateNote',
     component: () => import('../views/CreateNote.vue'),
     meta: {
-      layout: 'AppLayoutDefault',
+      layout: 'AppLayoutMain',
       requiresAuth: true
     }
   },
@@ -25,7 +25,7 @@ const routes = [
     name: 'EditNote',
     component: () => import('../views/EditNote'),
     meta: {
-      layout: 'AppLayoutDefault',
+      layout: 'AppLayoutMain',
       requiresAuth: true
     }
   },
