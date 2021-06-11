@@ -2,7 +2,7 @@
   <div class="container is-max-desktop">
     <NavBar></NavBar>
     <h1 class="title is-1 mt-4">Список заметок</h1>
-    <ul class="mt-3" v-if="notes">
+    <ul class="mt-3" v-if="notes?.results.length">
       <li v-for="note in notes.results" :key="note.id" class="notification">
         <button
             @click="$modal.show('delete-note', {id: note.id, title: note.code})"
@@ -27,13 +27,14 @@
     </ul>
     <div v-else>Нет заметок</div>
     <DeleteNote @delete-note="deleteNoteHandler"></DeleteNote>
+    <button type="button" @click="getMe">me</button>
   </div>
 </template>
 
 <script>
 
 import {formatDate} from "../utils";
-import {fetchNotes, deleteNote} from "../api";
+import {fetchNotes, deleteNote, me} from "../api";
 import NavBar from "../components/NavBar";
 import marked from "marked/lib/marked.esm";
 import DeleteNote from "../components/DeleteNote";
@@ -50,7 +51,7 @@ export default {
     }
   },
   methods: {
-    formatDate(timestamp){
+    formatDate(timestamp) {
       return formatDate(timestamp);
     },
     compiledMarkdown(text) {
@@ -68,11 +69,14 @@ export default {
       }
     },
     async getNotes() {
-      try{
+      try {
         this.notes = await fetchNotes();
       } catch (e) {
         console.log(e);
       }
+    },
+    async getMe(){
+      return me();
     }
   },
   watch: {
