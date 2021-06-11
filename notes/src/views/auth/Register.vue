@@ -2,16 +2,9 @@
   <h1 class="title is-1">Регистрация</h1>
   <form @submit.prevent="submit" class="box">
     <div class="field">
-      <label class="label">ФИО</label>
-      <div class="control">
-        <input v-model="name" class="input" type="text" placeholder="Name" required>
-      </div>
-    </div>
-
-    <div class="field">
       <label class="label">Имя пользователя</label>
       <div class="control">
-        <input v-model="userName" class="input" type="text" placeholder="Username" required>
+        <input v-model="username" class="input" type="text" placeholder="Username" required>
       </div>
     </div>
 
@@ -42,8 +35,7 @@ export default {
   name: "Register",
   data() {
     return {
-      name: '',
-      userName: '',
+      username: '',
       email: '',
       password: '',
       errorMsg: false,
@@ -51,12 +43,11 @@ export default {
   },
   methods: {
     async submit() {
-      if (!this.name && !this.userName && !this.email && !this.password) {
+      if (!this.name && !this.username && !this.email && !this.password) {
         return this.errorMsg = 'Некоторые поля не заполнены';
       }
       const user = {
-        name: this.name,
-        userName: this.userName,
+        username: this.username,
         email: this.email,
         password: this.password
       };
