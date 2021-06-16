@@ -1,34 +1,36 @@
 <template>
-    <component :is="layout">
-      <slot/>
-    </component>
+  <component :is="layout">
+    <slot/>
+  </component>
 </template>
 
 <script>
-import AppLayoutDefault from './AppLayoutDefault';
 import {markRaw} from 'vue';
 
 export default {
   name: "AppLayout",
   data() {
     return {
-      layout: 'div'
+      layout: null
+    }
+  },
+  methods: {
+    async getLayout(layout) {
+      const component = await import(`@/layouts/${layout}.vue`);
+      return component.default;
     }
   },
   watch: {
     $route: {
       async handler(route) {
         try {
-
-          const component = await import(`@/layouts/${route.meta.layout}.vue`);
-          console.log('try', component)
-          this.layout = markRaw(component?.default || AppLayoutDefault);
+          this.layout = markRaw(await this.getLayout(route.meta.layout));
         } catch (e) {
-          console.log('e', e)
-          this.layout = markRaw(AppLayoutDefault);
+          this.layout = markRaw(await this.getLayout('AppLayoutDefault'));
         }
       }
     }
-  }
+  },
+
 }
 </script>
