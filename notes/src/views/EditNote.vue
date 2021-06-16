@@ -69,7 +69,7 @@ export default {
   },
   created() {
     this.getNote();
-    console.log('created');
+    console.log('EditNote.created');
   }
 }
 </script>

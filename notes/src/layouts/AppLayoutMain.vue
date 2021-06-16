@@ -1,7 +1,7 @@
 <template>
   <div class="container is-max-widescreen">
     <NavBar></NavBar>
-    <slot></slot>
+    <slot/>
   </div>
 </template>
 
