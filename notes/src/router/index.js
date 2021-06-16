@@ -30,6 +30,15 @@ const routes = [
     }
   },
   {
+    path: '/about/',
+    name: 'About',
+    component: () => import('../views/About'),
+    meta: {
+      layout: 'AppLayoutMain',
+      requiresAuth: true
+    }
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/auth/Login'),

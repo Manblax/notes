@@ -27,17 +27,16 @@
     </ul>
     <div v-else>Нет заметок</div>
     <DeleteNote @delete-note="deleteNoteHandler"></DeleteNote>
-    <button type="button" @click="getMe">me</button>
   </div>
 </template>
 
 <script>
 
-import {formatDate} from "../utils";
-import {fetchNotes, deleteNote, me} from "../api";
-import NavBar from "../components/NavBar";
+import {formatDate} from "@/utils";
+import {fetchNotes, deleteNote} from "@/api";
+import NavBar from "@/components/NavBar";
 import marked from "marked/lib/marked.esm";
-import DeleteNote from "../components/DeleteNote";
+import DeleteNote from "@/components/DeleteNote";
 
 export default {
   name: 'Home',
@@ -75,9 +74,6 @@ export default {
         console.log(e);
       }
     },
-    async getMe(){
-      return me();
-    }
   },
   watch: {
     notes() {
