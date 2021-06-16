@@ -1,6 +1,6 @@
 <template>
   <div class="container is-max-desktop">
-    <slot></slot>
+    <slot/>
   </div>
 </template>
 <script>
