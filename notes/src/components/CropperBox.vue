@@ -2,13 +2,8 @@
   <div>
     <div class="content">
       <section>
-        <div class="img-cropper">
-          <vue-cropper
-              ref="cropper"
-              :aspect-ratio="NaN"
-              :src="imgSrc"
-              preview=".preview"
-          />
+        <div class="img-cropper" v-show="imgSrc">
+          <vue-cropper ref="cropper" :aspect-ratio="NaN" :src="imgSrc" preview=".preview"/>
         </div>
         <div class="actions">
           <button type="button" class="button is-link is-small mr-4 mb-4" @click="zoom(0.2)">
@@ -56,12 +51,7 @@
         <div class="preview"/>
         <p class="is-size-5 mt-4">Результат</p>
         <div>
-          <img
-              v-if="cropImg"
-              :src="cropImg"
-              class="cropped-image"
-              alt="Cropped Image"
-          />
+          <img v-if="cropImg" :src="cropImg" class="cropped-image" alt="Cropped Image"/>
           <div v-else class="crop-placeholder"/>
         </div>
       </section>
@@ -73,6 +63,7 @@
 import FileInput from "./FileInput";
 import VueCropper from 'vue-cropperjs';
 import 'cropperjs/dist/cropper.css';
+import {imageUrlToBase64} from "../utils";
 
 export default {
   name: "CropperBox",
@@ -83,20 +74,22 @@ export default {
   props: {
     src: {
       type: String,
-      default: 'https://bulma.io/images/placeholders/256x256.png'
+      default: ''
     }
   },
+  emits: ['cropped'],
   data() {
     return {
-      imgSrc: this.src,
+      imgSrc: '',
       cropImg: '',
+      fileName: '',
     };
   },
   methods: {
     cropImage() {
-      // get image data for post processing, e.g. upload or setting image src
       this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
-      this.$emit('cropped', this.cropImg);
+      //console.log('this.cromImg', this.cropImg)
+      this.$emit('cropped', {src: this.cropImg, name: this.fileName});
     },
     flipX() {
       const dom = this.$refs.flipX;
@@ -124,24 +117,36 @@ export default {
     setImage(e) {
       const file = e.target.files[0];
       if (file.type.indexOf('image/') === -1) {
-        alert('Please select an image file');
+        console.log('Пожалуйства выберите изображение');
         return;
       }
       const reader = new FileReader();
-      reader.onload = (event) => {
-        this.imgSrc = event.target.result;
-        // rebuild cropperjs with the updated source
-        this.$refs.cropper.replace(event.target.result);
-      };
       reader.readAsDataURL(file);
+
+      reader.addEventListener('load', (event) => {
+        this.imgSrc = event.target.result;
+
+        this.$refs.cropper.replace(event.target.result);
+        this.fileName = e.target.files[0].name;
+        this.$emit('cropped', {src: this.imgSrc, name: this.fileName});
+      });
+
+      reader.addEventListener('error', () => {
+        console.log('Ошибка при обработке изображения');
+      });
     },
     zoom(percent) {
       this.$refs.cropper.relativeZoom(percent);
     },
   },
   watch: {
-    src() {
-      this.imgSrc = this.src;
+    async src() {
+      try {
+        this.imgSrc = await imageUrlToBase64(this.src);
+      } catch (e) {
+        console.log(e, 'Ошибка при конвертации изображения');
+      }
+
       this.$refs.cropper.replace(this.imgSrc);
     }
   }

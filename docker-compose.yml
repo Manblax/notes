@@ -1,16 +1,20 @@
-version: "3.3"
+version: '3.7'
+
 services:
   api:
-    image: test-api
-    build: api/
+    build: api
     container_name: test_api
+    command: python manage.py runserver 0.0.0.0:8000
     ports:
-      - "3000:3000"
-
+      - 8000:8000
+    volumes:
+      - ./api:/api
 
   notes:
-    image: test-notes
     build: notes/
     container_name: test_notes
+    command: npm run serve
     ports:
-      - "80:8080"
+      - 80:8080
+    volumes:
+      - ./notes:/app

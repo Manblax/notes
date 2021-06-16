@@ -1,7 +1,13 @@
-FROM node:latest
-EXPOSE 3000
-WORKDIR /app
-COPY package* ./
-RUN npm install
+FROM python:3.9.5
+
+RUN pip install \
+    django \
+    djangorestframework \
+    djoser \
+    django-cors-headers
+
+WORKDIR /api
+
 COPY . .
-ENTRYPOINT npm run api
+
+EXPOSE 8000

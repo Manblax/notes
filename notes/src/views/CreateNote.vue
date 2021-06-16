@@ -1,52 +1,58 @@
 <template>
-  <div class="container is-max-widescreen">
-    <NavBar></NavBar>
-    <h1 class="title is-1 mt-4">Создать заметку</h1>
-    <form @submit.prevent="createNote" class="box">
-      <CropperBox @cropped="changeSrc" class="mb-6"></CropperBox>
-      <MarkDownBox v-model:desc="text"></MarkDownBox>
-      <button type="submit" class="button is-link">Создать</button>
-    </form>
-  </div>
+  <h1 class="title is-1 mt-4">Создать заметку</h1>
+  <form @submit.prevent="createNote" class="box">
+    <CropperBox @cropped="changeFile" class="mb-6"></CropperBox>
+    <MarkDownBox v-model:desc="code"></MarkDownBox>
+    <button type="submit" class="button is-link">Создать</button>
+  </form>
 </template>
 
 <script>
 
 import {sendNote} from "../api";
-import NavBar from "../components/NavBar";
 import CropperBox from "../components/CropperBox";
 import MarkDownBox from "../components/MarkDownBox";
 
 export default {
   name: 'CreateNote',
   components: {
-    NavBar,
     CropperBox,
     MarkDownBox
   },
   data() {
     return {
-      text: '',
+      code: '',
       src: '',
+      fileName: '',
     }
   },
   methods: {
     async createNote() {
-      if (!this.text) return;
-      const note = {
-        src: this.src,
-        text: this.text,
-        date: Date.now()
-      };
+      if (!this.code) return;
+
+      const formData = new FormData();
+      formData.append('code', this.code);
+
+      if (this.src) {
+        try {
+          const res = await fetch(this.src);
+          const blob = await res.blob();
+          formData.append('file', blob, this.fileName);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
       try {
-        await sendNote(note);
+        await sendNote(formData);
         await this.$router.push({name: 'Home'});
       } catch (e) {
         console.error(e);
       }
     },
-    changeSrc(src) {
-      this.src = src;
+    changeFile(file) {
+      this.src = file.src;
+      this.fileName = file.name;
     }
   }
 }

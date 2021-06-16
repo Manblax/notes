@@ -16,6 +16,7 @@ const routes = [
     name: 'CreateNote',
     component: () => import('../views/CreateNote.vue'),
     meta: {
+      layout: 'AppLayoutMain',
       requiresAuth: true
     }
   },
@@ -24,6 +25,16 @@ const routes = [
     name: 'EditNote',
     component: () => import('../views/EditNote'),
     meta: {
+      layout: 'AppLayoutMain',
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/about/',
+    name: 'About',
+    component: () => import('../views/About'),
+    meta: {
+      layout: 'AppLayoutMain',
       requiresAuth: true
     }
   },
@@ -32,6 +43,7 @@ const routes = [
     name: 'Login',
     component: () => import('../views/auth/Login'),
     meta: {
+      layout: 'AppLayoutAuth',
       requiresAuth: false
     }
   },
@@ -40,6 +52,7 @@ const routes = [
     name: 'Reg',
     component: () => import('../views/auth/Register'),
     meta: {
+      layout: 'AppLayoutAuth',
       requiresAuth: false
     }
   }

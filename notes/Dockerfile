@@ -1,7 +1,11 @@
 FROM node:latest
-EXPOSE 8080
-WORKDIR /app
+
 COPY package* ./
+
 RUN npm install
+
+WORKDIR /app
+
 COPY . .
-ENTRYPOINT npm run serve
+
+EXPOSE 8080

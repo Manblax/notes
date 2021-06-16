@@ -1,9 +1,18 @@
 <template>
   <main class="pt-6">
-    <router-view/>
+    <AppLayout>
+      <router-view/>
+    </AppLayout>
   </main>
 </template>
 
-<style>
+<script>
+import AppLayout from "./layouts/AppLayout";
 
-</style>
+export default {
+  name: 'App',
+  components: {
+    AppLayout
+  }
+}
+</script>

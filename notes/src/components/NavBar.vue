@@ -4,12 +4,13 @@
       <div class="navbar-start">
         <router-link :to="{name: 'Home'}" class="navbar-item">Главная</router-link>
         <router-link :to="{name: 'CreateNote'}" class="navbar-item">Создать</router-link>
+        <router-link :to="{name: 'About'}" class="navbar-item">Обо мне</router-link>
       </div>
 
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <span v-if="currentUser" class="mr-4">{{ currentUser }}</span>
+            <span v-if="currentUser" class="mb-2 mr-4">{{ currentUser }}</span>
             <button @click="logOut" class="button is-light">
               Выйти
             </button>
