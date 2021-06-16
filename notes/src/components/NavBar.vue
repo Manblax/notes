@@ -1,6 +1,11 @@
 <template>
   <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
-    <div class="navbar-menu">
+    <button @click="toggleMenu" :class="{'is-active': isOpen}" class="hamburger hamburger--squeeze" type="button">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+    <div class="navbar-menu" :class="{'is-active': isOpen}">
       <div class="navbar-start">
         <router-link :to="{name: 'Home'}" class="navbar-item">Главная</router-link>
         <router-link :to="{name: 'CreateNote'}" class="navbar-item">Создать</router-link>
@@ -28,7 +33,8 @@ export default {
   name: "NavBar",
   data() {
     return {
-      currentUser: ''
+      currentUser: '',
+      isOpen: false,
     }
   },
   methods: {
@@ -47,7 +53,10 @@ export default {
       } catch (e) {
         console.error(e);
       }
-    }
+    },
+    toggleMenu() {
+      this.isOpen = !this.isOpen;
+    },
   },
   created() {
     this.setCurrentUser();
@@ -55,6 +64,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style src="@/assets/css/hamburger.css" scoped></style>

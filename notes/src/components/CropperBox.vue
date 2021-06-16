@@ -154,12 +154,6 @@ export default {
 </script>
 
 <style scoped>
-.content {
-  display: grid;
-  justify-content: space-between;
-  grid-template-columns: 614px 307px;
-  grid-gap: 40px;
-}
 
 .actions {
   margin-top: 1rem;
@@ -175,6 +169,21 @@ export default {
   width: 100%;
   height: 200px;
   background: #ccc;
+}
+
+@media screen and (min-width: 1024px) {
+  .content {
+    display: grid;
+    justify-content: space-between;
+    grid-template-columns: auto 270px;
+    grid-gap: 20px;
+  }
+}
+
+@media screen and (min-width: 1216px) {
+  .content {
+    grid-template-columns: 614px 307px;
+  }
 }
 
 </style>
